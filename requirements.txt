@@ -1,0 +1,7 @@
+vllm
+fastapi
+uvicorn
+httpx
+openai
+pandas
+transformers
