@@ -70,4 +70,10 @@ I changed it to: take the product of that SKU, then find the rows in the shopper
 
 | Run | Model | p50 latency | p95 latency | Errors | Peak GPU memory |
 |---|---|---|---|---|---|
-| _fill in from `results/load_test_<date>_summary.json`_ | | | | | |
+| [`run-20261123-1647-seed42`](results/load_test_20261123-1647.jsonl) | Qwen/Qwen2.5-1.5B-Instruct | 1,830 ms | 2,028 ms | 0 / 20 | 13,231 MiB |
+
+Run on a free Colab T4 (fp16, `max_model_len=1024`, `max_num_seqs=20`). All 20 requests overlapped in time and finished in 2.45 s wall-clock (about 150 reply tokens/s). The largest prompt including stock rows was 368 tokens, well inside the 1,024 budget. Peak GPU memory is high mainly because vLLM pre-allocates 90% of the card for the KV cache.
+
+`tests/check_results.py` passed on this file: 20 lines, every `question_id` found in the replay CSV, and the right catalog rows for each `product_sku` and `variant_size`. The two stock questions were answered correctly from those rows (Q-00939: 78 in stock in L; Q-01647: no L left, restock date given).
+
+Full per-question results: [`results/load_test_20261123-1647.jsonl`](results/load_test_20261123-1647.jsonl). Summary: [`results/load_test_20261123-1647_summary.json`](results/load_test_20261123-1647_summary.json).
